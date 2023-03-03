@@ -1723,7 +1723,9 @@ Browser_List_Set_Row_Appearance (EtBrowser *self, GtkTreeIter *iter)
     ET_File *rowETFile = NULL;
     gboolean otherdir = FALSE;
     const GdkRGBA LIGHT_BLUE = { 0.866, 0.933, 1.0, 1.0 };
+    const GdkRGBA DARK = { 0.05, 0.01, 0.02, 1.0 };
     const GdkRGBA *background;
+    const GdkRGBA *foreground;
     //gchar *temp = NULL;
 
     priv = et_browser_get_instance_private (self);
@@ -1738,11 +1740,15 @@ Browser_List_Set_Row_Appearance (EtBrowser *self, GtkTreeIter *iter)
                        //LIST_FILE_NAME,      &temp,
                        -1);
 
-    // Must change background color?
-    if (otherdir)
+    // Must change background color and text color??
+    if (otherdir) {
         background = &LIGHT_BLUE;
-    else
+        foreground = &DARK;
+    }
+    else {
         background = NULL;
+        foreground = NULL;
+    }
 
     // Set text to bold/red if 'filename' or 'tag' changed
     if (!et_file_check_saved (rowETFile))
@@ -1752,7 +1758,7 @@ Browser_List_Set_Row_Appearance (EtBrowser *self, GtkTreeIter *iter)
             gtk_list_store_set(priv->file_model, iter,
                                LIST_FONT_WEIGHT,    PANGO_WEIGHT_BOLD,
                                LIST_ROW_BACKGROUND, background,
-                               LIST_ROW_FOREGROUND, NULL, -1);
+                               LIST_ROW_FOREGROUND, foreground, -1);
         } else
         {
             gtk_list_store_set(priv->file_model, iter,
@@ -1765,7 +1771,7 @@ Browser_List_Set_Row_Appearance (EtBrowser *self, GtkTreeIter *iter)
         gtk_list_store_set(priv->file_model, iter,
                            LIST_FONT_WEIGHT,    PANGO_WEIGHT_NORMAL,
                            LIST_ROW_BACKGROUND, background,
-                           LIST_ROW_FOREGROUND, NULL ,-1);
+                           LIST_ROW_FOREGROUND, foreground, -1);
     }
 
     // Update text fields
